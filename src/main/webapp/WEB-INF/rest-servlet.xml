@@ -16,7 +16,5 @@
 	<mvc:annotation-driven />
 
 	<bean id="business" class="com.garmin.business.impl.FacultyBusinessServicesImpl">
-	
 	</bean>
-
 </beans>

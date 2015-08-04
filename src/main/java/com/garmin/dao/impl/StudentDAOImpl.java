@@ -2,8 +2,11 @@ package com.garmin.dao.impl;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.garmin.dao.StudentDAO;
 import com.garmin.dao.model.StudentDTO;
 import com.garmin.util.StudentMapper;
@@ -16,26 +19,49 @@ public class StudentDAOImpl implements StudentDAO {
 		this.jdbcTemplateObject = jdbcTemplateObject;
 	}
 
-	public StudentDTO getStudentById(int id) {
-		String sql = "select * from student where student_id = ?";
-		StudentDTO student = jdbcTemplateObject.queryForObject(sql,
-				new Object[] { id }, new StudentMapper());
+	public StudentDTO getStudentById(String id) {
+		String sql = "select * from student where studentId= ? and isDeleted=0";
+		try {
+			StudentDTO student = jdbcTemplateObject.queryForObject(sql, new Object[] { id }, new StudentMapper());
+			return student;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	public StudentDTO getStudentByName(String name) {
+		String sql = "select * from student where name = ?";
+		StudentDTO student = jdbcTemplateObject.queryForObject(sql, new Object[] { name }, new StudentMapper());
 
 		return student;
 	}
 
 	public List<StudentDTO> listAllStudents() {
-		String sql = "select * from student ";
-		List<StudentDTO> allStudents = jdbcTemplateObject.query(sql,
-				new StudentMapper());
+		String sql = "select * from student where isDeleted=0";
+		List<StudentDTO> allStudents = jdbcTemplateObject.query(sql, new StudentMapper());
 		return allStudents;
 	}
 
-	public void addStudent(StudentDTO studentDTO) {
-		String SQL = "insert into student (student_id, name,registration_no) values (?, ?,?)";
-		System.out.println(studentDTO.getId()+studentDTO.getName());
-		jdbcTemplateObject.update(SQL, studentDTO.getId(),studentDTO.getName(),studentDTO.getRegistration_no());
+	public StudentDTO getStudentByRegistrationNoAndName(String name, int regNo) {
+		String sql = "select * from student where   name=? and registrationNo = ?";
+		try {
+			StudentDTO student = jdbcTemplateObject.queryForObject(sql, new Object[] { name, regNo },
+					new StudentMapper());
+			return student;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 
+	}
+
+	public int updateStudent(StudentDTO student) {
+		String sql = "update student set isDeleted=? where registrationNo=?";
+		return jdbcTemplateObject.update(sql, 0, student.getRegistrationNo());
+	}
+
+	public int insertStudent(StudentDTO student) {
+		String sql = "insert into student(studentId,name,registrationNo)  values(?,?,?) ";
+		return jdbcTemplateObject.update(sql, student.getId(), student.getName(), student.getRegistrationNo());
 	}
 
 }

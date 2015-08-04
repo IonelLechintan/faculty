@@ -2,14 +2,15 @@ package com.garmin.dao;
 
 import java.util.List;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-
 import com.garmin.dao.model.StudentDTO;
 
 public interface StudentDAO {
 
  
-	public StudentDTO getStudentById(int id);
+	public StudentDTO getStudentById(String id);
+	public StudentDTO getStudentByName(String name);
 	public List<StudentDTO> listAllStudents();
-	public void addStudent(StudentDTO studentDTO);
+	public StudentDTO getStudentByRegistrationNoAndName(String name,int regNo);
+	public int insertStudent(StudentDTO student);
+	public int updateStudent(StudentDTO student);
 }

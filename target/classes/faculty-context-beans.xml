@@ -2,24 +2,36 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans     
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+	<!-- xmlns:tx="http://www.springframework.org/schema/tx" -->
+	<tx:annotation-driven transaction-manager="txManager" />
 
 	<bean id="studentDAO" class="com.garmin.dao.impl.StudentDAOImpl">
 		<constructor-arg ref="jdbcTemplate" />
 	</bean>
-
-	<bean id="translator" class="com.garmin.util.Translator"> 
+	<bean id="participantsDAO" class="com.garmin.dao.impl.ParticipantsDAOImpl">
+		<constructor-arg ref="jdbcTemplate" />
 	</bean>
+	<bean id="courseDAO" class="com.garmin.dao.impl.CourseDAOImpl">
+		<constructor-arg ref="jdbcTemplate" />
+	</bean>
+	<bean id="translator" class="com.garmin.util.Translator">
+	</bean>
+
 	<bean id="facultyManager" class="com.garmin.manager.impl.FacultyManagerImpl">
-		<constructor-arg ref="studentDAO"></constructor-arg>
+		<constructor-arg ref="studentDAO"/>
+		<constructor-arg ref="courseDAO"/>
+		<constructor-arg ref="participantsDAO"/>
 	</bean>
 
 	<bean id="dataSource"
@@ -30,11 +42,13 @@
 		<property name="password" value="" />
 	</bean>
 
-
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 
 </beans>

@@ -1,23 +1,33 @@
 package com.garmin.model;
 
-public class StudentBO {
+import java.io.Serializable;
 
-	private int id;
+public class StudentBO implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3515808963198113420L;
+	private String id;
 	private String name;
-	private int registration_no;
+	private int registrationNo;
 
-	public StudentBO(int id, String name, int registration_no) {
-		this.id = id;
-		this.name = name;
-		this.registration_no = registration_no;
+	public StudentBO() {
+		// TODO Auto-generated constructor stub
 	}
 
+	public StudentBO(String id, String name, int registrationNo) {
 
-	public int getId() {
+		this.id = id;
+		this.name = name;
+		this.registrationNo = registrationNo;
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -29,11 +39,12 @@ public class StudentBO {
 		this.name = name;
 	}
 
-	public int getRegistration_no() {
-		return registration_no;
+	public int getRegistrationNo() {
+		return registrationNo;
 	}
 
-	public void setRegistration_no(int registration_no) {
-		this.registration_no = registration_no;
+	public void setRegistrationNo(int registrationNo) {
+		this.registrationNo = registrationNo;
 	}
+
 }

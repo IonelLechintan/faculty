@@ -10,10 +10,11 @@ import com.garmin.dao.model.StudentDTO;
 public class StudentMapper implements RowMapper<StudentDTO> {
 	public StudentDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		StudentDTO student = new StudentDTO();
-		student.setId(rs.getInt("student_id"));
+		student.setId(rs.getString("studentId"));
 		student.setName(rs.getString("name"));
-		student.setRegistration_no(rs.getInt("registration_no"));
-		student.setDeleted(rs.getBoolean("is_deleted"));
+		student.setRegistrationNo(rs.getInt("registrationNo"));
+		student.setDeleted(rs.getBoolean("isDeleted"));
+
 		return student;
 	}
 }

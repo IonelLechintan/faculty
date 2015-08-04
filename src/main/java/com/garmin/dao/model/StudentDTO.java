@@ -1,28 +1,27 @@
 package com.garmin.dao.model;
 
 public class StudentDTO {
-	private int id;
+
+	private String id;
 	private String name;
-	private int registration_no;
+	private int registrationNo;
 	private boolean isDeleted;
 
 	public StudentDTO() {
 
 	}
 
-	public StudentDTO(int id, String name, int registration_no) {
-
+	public StudentDTO(String id, String name, int registrationNo) {
 		this.id = id;
 		this.name = name;
-		this.registration_no = registration_no;
+		this.registrationNo = registrationNo;
 	}
 
-	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -34,12 +33,12 @@ public class StudentDTO {
 		this.name = name;
 	}
 
-	public int getRegistration_no() {
-		return registration_no;
+	public int getRegistrationNo() {
+		return registrationNo;
 	}
 
-	public void setRegistration_no(int registration_no) {
-		this.registration_no = registration_no;
+	public void setRegistrationNo(int registrationNo) {
+		this.registrationNo = registrationNo;
 	}
 
 	public boolean isDeleted() {
