@@ -1,5 +1,6 @@
 package com.garmin.manager.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,12 +10,12 @@ import com.garmin.dao.CourseDAO;
 import com.garmin.dao.ParticipantsDAO;
 import com.garmin.dao.StudentDAO;
 import com.garmin.dao.model.CourseDTO;
+import com.garmin.dao.model.StudentAtCoursesDTO;
 import com.garmin.dao.model.StudentDTO;
 import com.garmin.manager.FacultyManager;
 import com.garmin.model.exceptions.EntityAlreadyExistException;
 import com.garmin.model.exceptions.EntityNotFoundException;
 
-@Transactional(readOnly = true)
 public class FacultyManagerImpl implements FacultyManager {
 	private StudentDAO studentDAO;
 	private CourseDAO courseDAO;
@@ -26,6 +27,7 @@ public class FacultyManagerImpl implements FacultyManager {
 		this.participantsDAO = participantsDAO;
 	}
 
+	@Transactional(readOnly = true)
 	public StudentDTO getStudentById(String id) {
 		StudentDTO student = studentDAO.getStudentById(id);
 		if (student == null) {
@@ -35,6 +37,7 @@ public class FacultyManagerImpl implements FacultyManager {
 		}
 	}
 
+	@Transactional(readOnly = true)
 	public List<StudentDTO> listAllStudents() {
 		return studentDAO.listAllStudents();
 	}
@@ -58,6 +61,7 @@ public class FacultyManagerImpl implements FacultyManager {
 
 	}
 
+	@Transactional(readOnly = true)
 	public CourseDTO getCourseById(String id) {
 		CourseDTO course = courseDAO.getCourseById(id);
 		if (course == null) {
@@ -67,6 +71,7 @@ public class FacultyManagerImpl implements FacultyManager {
 		}
 	}
 
+	@Transactional(readOnly = true)
 	public List<CourseDTO> listAllCourses() {
 		return courseDAO.listAllCourses();
 	}
@@ -91,7 +96,6 @@ public class FacultyManagerImpl implements FacultyManager {
 
 	@Transactional(readOnly = false)
 	public List<CourseDTO> addStudentToCourses(String studentId, List<CourseDTO> coursesToAttend) {
-
 		StudentDTO studentDTO = studentDAO.getStudentById(studentId);
 		if (studentDTO == null) {
 			throw new EntityNotFoundException("Student with id= " + studentId + " was not found");
@@ -102,9 +106,8 @@ public class FacultyManagerImpl implements FacultyManager {
 					throw new EntityNotFoundException("Course with name: " + courseDTO.getName() + " was not found");
 				} else {
 					UUID participantId = UUID.randomUUID();
-
-					if (participantsDAO.getParticipantByStudentIdAndCourseId(studentId,
-							courseDTOHelper.getCourseId()) == 0) {
+					if (!participantsDAO.getParticipantByStudentIdAndCourseId(studentId,
+							courseDTOHelper.getCourseId())) {
 						courseDTO = this.updateCourse(courseDTOHelper);
 						participantsDAO.addStudentToCourse(participantId.toString(), studentId,
 								courseDTO.getCourseId());
@@ -115,4 +118,21 @@ public class FacultyManagerImpl implements FacultyManager {
 		return null;
 	}
 
+	@Transactional(readOnly = false)
+	public StudentAtCoursesDTO listStudentWithCourses(String studentId) {
+		StudentDTO studentDTO = studentDAO.getStudentById(studentId);
+		if (studentDTO == null) {
+			throw new EntityNotFoundException("Student with id= " + studentId + " was not found");
+		} else {
+			List<String> studentCourses = participantsDAO.getAllCoursesByStudentId(studentId);
+			List<CourseDTO> coursesDTO = new ArrayList<CourseDTO>();
+			for (String courseId : studentCourses) {
+				coursesDTO.add(courseDAO.getCourseById(courseId));
+				// coursesDTO.get(0).getName();
+			}
+			return new StudentAtCoursesDTO(studentDTO.getName(), coursesDTO);
+
+		}
+
+	}
 }

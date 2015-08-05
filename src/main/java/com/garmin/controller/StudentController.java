@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.garmin.business.FacultyBusinessServices;
+import com.garmin.dao.model.StudentAtCoursesDTO;
 import com.garmin.model.CourseBO;
 import com.garmin.model.StudentBO;
 import com.garmin.model.exceptions.EmptyDataSetException;
@@ -51,8 +52,14 @@ public class StudentController {
 
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public void addStudentToCourses(@PathVariable String studentId, @RequestBody List<CourseBO> coursesToAttend) {
-System.out.println(coursesToAttend.get(1).getName());
-facultyBusinessServices.addStudentToCourses(studentId,coursesToAttend);
+		System.out.println(coursesToAttend.get(1).getName());
+		facultyBusinessServices.addStudentToCourses(studentId, coursesToAttend);
+	}
+
+	@RequestMapping(value = "/courses/{studentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public StudentAtCoursesDTO listStudentAtCourses(@PathVariable String studentId) {
+
+		return facultyBusinessServices.listStudentWithCourses(studentId);
 	}
 
 	@ExceptionHandler(EntityAlreadyExistException.class)

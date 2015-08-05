@@ -1,8 +1,15 @@
 package com.garmin.dao.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.jdbc.core.RowMapper;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.garmin.dao.ParticipantsDAO;
 import com.garmin.dao.model.ParticipantDTO;
 import com.garmin.util.ParticipantMapper;
@@ -19,13 +26,23 @@ public class ParticipantsDAOImpl implements ParticipantsDAO {
 		return jdbcTemplateObject.update(sql, participantsId, studentId, courseId);
 	}
 
-	public int getParticipantByStudentIdAndCourseId(String studentId, String courseId) {
+	public List<String> getAllCoursesByStudentId(String studentId) {
+		String sql = "select * from participants courseId where studentId = ?";
+		return (List<String>) jdbcTemplateObject.query(sql, new Object[] { studentId }, new RowMapper<String>() {
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getString(3);
+			}
+		});
+	}
+
+	public boolean getParticipantByStudentIdAndCourseId(String studentId, String courseId) {
 		String sql = "select * from participants where studentId=? and courseId=?";
-
-		ParticipantDTO partipantDTO = jdbcTemplateObject.queryForObject(sql, new Object[] { studentId, courseId },
-				new ParticipantMapper());
-
-		return 1;
-
+		try {
+			ParticipantDTO partipantDTO = jdbcTemplateObject.queryForObject(sql, new Object[] { studentId, courseId },
+					new ParticipantMapper());
+			return true;
+		} catch (EmptyResultDataAccessException e) {
+			return false;
+		}
 	}
 }

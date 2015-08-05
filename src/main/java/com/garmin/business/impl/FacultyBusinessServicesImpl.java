@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.garmin.business.FacultyBusinessServices;
+import com.garmin.dao.model.StudentAtCoursesDTO;
 import com.garmin.manager.FacultyManager;
 import com.garmin.model.CourseBO;
 import com.garmin.model.StudentBO;
@@ -52,6 +53,11 @@ public class FacultyBusinessServicesImpl implements FacultyBusinessServices {
 		translator.translateAllCoursesToBusinnesObject(facultyManager.addStudentToCourses(studentId,
 				translator.translateAllCoursestoDataTransferObject(coursesToAttend)));
 
+	}
+
+	public StudentAtCoursesDTO listStudentWithCourses(String studentId) {
+		 
+		return facultyManager.listStudentWithCourses(studentId);
 	}
 
 }
