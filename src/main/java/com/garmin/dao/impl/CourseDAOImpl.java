@@ -49,9 +49,15 @@ public class CourseDAOImpl implements CourseDAO {
 		return jdbcTemplateObject.update(sql, course.getCourseId(), course.getName());
 	}
 
-	public int updateCourse(CourseDTO course) {
+	public int updateCourse(CourseDTO courseDTO) {
 		String sql = "update course set noOfStudents=noOfStudents+1 where name=?";
-		return jdbcTemplateObject.update(sql, course.getName());
+		return jdbcTemplateObject.update(sql, courseDTO.getName());
+	}
+
+	public int deleteCourse(CourseDTO courseDTO) {
+		String sql = "delete from course where courseId=?";
+		return jdbcTemplateObject.update(sql, courseDTO.getCourseId());
+
 	}
 
 }

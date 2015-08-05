@@ -3,7 +3,6 @@
 import java.util.List;
 
 import com.garmin.dao.model.CourseDTO;
-import com.garmin.dao.model.StudentAtCoursesDTO;
 import com.garmin.dao.model.StudentDTO;
 import com.garmin.model.exceptions.EntityAlreadyExistException;
 
@@ -15,5 +14,7 @@ public interface FacultyManager {
 	public List<CourseDTO>  listAllCourses();
 	public CourseDTO addStudent(CourseDTO courseDTO) throws EntityAlreadyExistException;
 	public List<CourseDTO> addStudentToCourses(String studentId, List<CourseDTO> coursesToAttend);
-	public StudentAtCoursesDTO listStudentWithCourses(String studentId);
+	public List<CourseDTO> listStudentAtCourses(String studentId);
+	public List<StudentDTO> listAllStudentsAtCourse(String courseId);
+	public void deleteCourse(CourseDTO courseDTO);
 }

@@ -9,5 +9,6 @@ public interface CourseDAO {
 	public CourseDTO getCourseByName(String name);
 	public List<CourseDTO> listAllCourses();
 	public int insertCourse(CourseDTO courseDTO);
-	public int updateCourse(CourseDTO course);
+	public int updateCourse(CourseDTO courseDTO);
+	public int deleteCourse(CourseDTO courseDTO);
 }

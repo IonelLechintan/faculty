@@ -4,12 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.jdbc.core.RowMapper;
-
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
-import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.garmin.dao.ParticipantsDAO;
 import com.garmin.dao.model.ParticipantDTO;
 import com.garmin.util.ParticipantMapper;
@@ -44,5 +42,19 @@ public class ParticipantsDAOImpl implements ParticipantsDAO {
 		} catch (EmptyResultDataAccessException e) {
 			return false;
 		}
+	}
+
+	public List<String> getAllStudentsByCourseId(String courseId) {
+		String sql = "select * from participants studentId where courseId = ?";
+		return (List<String>) jdbcTemplateObject.query(sql, new Object[] { courseId }, new RowMapper<String>() {
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getString(2);
+			}
+		});
+	}
+
+	public int deleteCourse(String courseId) {
+		String sql = "delete from participants where courseId=?";
+		return jdbcTemplateObject.update(sql, courseId);
 	}
 }

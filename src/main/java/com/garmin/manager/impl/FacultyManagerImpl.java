@@ -119,7 +119,7 @@ public class FacultyManagerImpl implements FacultyManager {
 	}
 
 	@Transactional(readOnly = false)
-	public StudentAtCoursesDTO listStudentWithCourses(String studentId) {
+	public List<CourseDTO> listStudentAtCourses(String studentId) {
 		StudentDTO studentDTO = studentDAO.getStudentById(studentId);
 		if (studentDTO == null) {
 			throw new EntityNotFoundException("Student with id= " + studentId + " was not found");
@@ -128,9 +128,34 @@ public class FacultyManagerImpl implements FacultyManager {
 			List<CourseDTO> coursesDTO = new ArrayList<CourseDTO>();
 			for (String courseId : studentCourses) {
 				coursesDTO.add(courseDAO.getCourseById(courseId));
-				// coursesDTO.get(0).getName();
 			}
-			return new StudentAtCoursesDTO(studentDTO.getName(), coursesDTO);
+			return coursesDTO;
+
+		}
+
+	}
+
+	@Transactional(readOnly = false)
+	public List<StudentDTO> listAllStudentsAtCourse(String courseId) {
+		CourseDTO courseDTO = courseDAO.getCourseById(courseId);
+		if (courseDTO == null) {
+			throw new EntityNotFoundException("Course with id= " + courseId + " was not found");
+		} else {
+			List<String> courseStudents = participantsDAO.getAllStudentsByCourseId(courseId);
+			List<StudentDTO> studentDTO = new ArrayList<StudentDTO>();
+			for (String studentId : courseStudents) {
+				studentDTO.add(studentDAO.getStudentById(studentId));
+			}
+			return studentDTO;
+		}
+	}
+
+	@Transactional(readOnly = false)
+	public void deleteCourse(CourseDTO courseDTO) {
+		if (courseDAO.deleteCourse(courseDTO) != 0) {
+			participantsDAO.deleteCourse(courseDTO.getCourseId());
+		} else {
+			throw new EntityNotFoundException("Course with id= " + courseDTO.getCourseId() + " was not found");
 
 		}
 

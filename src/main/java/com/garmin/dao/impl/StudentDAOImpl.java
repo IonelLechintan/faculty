@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.garmin.dao.StudentDAO;
 import com.garmin.dao.model.StudentDTO;
 import com.garmin.util.StudentMapper;

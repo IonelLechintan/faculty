@@ -40,7 +40,7 @@ public class Translator {
 		return new StudentDTO(studentBO.getId(), studentBO.getName(), studentBO.getRegistrationNo());
 	}
 
-	public CourseBO translateCoursetoBusinessObject(CourseDTO courseDTO) {
+	public CourseBO translateCourseToBusinessObject(CourseDTO courseDTO) {
 		return new CourseBO(courseDTO.getCourseId(), courseDTO.getName(), courseDTO.getNoOfStudents());
 	}
 

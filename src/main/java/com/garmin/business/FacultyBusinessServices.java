@@ -16,5 +16,7 @@ public interface FacultyBusinessServices {
 	public List<CourseBO> listAllCourses();
 	public CourseBO addCourse(CourseBO courseBO);
 	public void addStudentToCourses(String studentId, List<CourseBO> coursesToAttend);
-	public StudentAtCoursesDTO listStudentWithCourses(String studentId);
+	public List<CourseBO> listStudentWithCourses(String studentId);
+	public List<StudentBO> listAllStudentsAtCourse( String courseId);
+	public void deleteCourse(CourseBO course);
 }

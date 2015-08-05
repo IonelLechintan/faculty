@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.garmin.business.FacultyBusinessServices;
 import com.garmin.model.CourseBO;
+import com.garmin.model.StudentBO;
 import com.garmin.model.exceptions.EmptyDataSetException;
 import com.garmin.model.exceptions.EntityAlreadyExistException;
 import com.garmin.model.exceptions.EntityNotFoundException;
@@ -41,13 +42,23 @@ public class CourseController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public CourseBO addCourse(@RequestBody CourseBO courseBO,@PathVariable String id)
+	public CourseBO addCourse(@RequestBody CourseBO courseBO, @PathVariable String id)
 			throws EntityAlreadyExistException, EmptyDataSetException, EntityNotFoundException {
 		facultyLogger.info("The post method was called");
 		if (courseBO.getName() == null)
 			throw new EmptyDataSetException("The data sent is null");
-		id="12312312312#!";
 		return facultyBusinessServices.addCourse(courseBO);
+	}
+
+	@RequestMapping(value = "/{courseId}/students", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<StudentBO> listAllStudentsAtCourse(@PathVariable String courseId) {
+		return facultyBusinessServices.listAllStudentsAtCourse(courseId);
+
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void deleteCourse(@RequestBody CourseBO course) {
+		facultyBusinessServices.deleteCourse(course);
 	}
 
 	@ExceptionHandler(EntityAlreadyExistException.class)
