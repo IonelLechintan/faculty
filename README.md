@@ -1,1 +1,1 @@
-A simple project where I used Spring MVC with Rest, in Maven
+A simple project where I used Spring MVC, Rest, Logging and Unit Testing in Maven.
