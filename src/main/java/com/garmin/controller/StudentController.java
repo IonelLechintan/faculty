@@ -58,6 +58,11 @@ public class StudentController {
 	public List<CourseBO> listStudentAtCourses(@PathVariable String studentId) {
 		return facultyBusinessServices.listStudentWithCourses(studentId);
 	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void deleteStudent(@RequestBody StudentBO student) {
+		facultyBusinessServices.deleteStudent(student);
+	}
 
 	@ExceptionHandler(EntityAlreadyExistException.class)
 	@ResponseStatus(value = HttpStatus.CONFLICT)
@@ -83,7 +88,6 @@ public class StudentController {
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	public String otherExceptions(Exception exception) {
-
 		facultyLogger.warn("Other exception caugth with cause: ", exception);
 		return "Internal application problem";
 	}

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.garmin.business.FacultyBusinessServices;
 import com.garmin.dao.model.CourseDTO;
-import com.garmin.dao.model.StudentAtCoursesDTO;
 import com.garmin.manager.FacultyManager;
 import com.garmin.model.CourseBO;
 import com.garmin.model.StudentBO;
@@ -69,6 +68,11 @@ public class FacultyBusinessServicesImpl implements FacultyBusinessServices {
 
 	public void deleteCourse(CourseBO course) {
 		facultyManager.deleteCourse(translator.translateCourseToDataTransferObject(course));
+		
+	}
+
+	public void deleteStudent(StudentBO student) {
+		facultyManager.deleteStudent(translator.translateStudentToDataTransferObject(student));
 		
 	}
 

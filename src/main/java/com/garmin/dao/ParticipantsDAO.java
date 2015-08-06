@@ -9,4 +9,5 @@ public interface ParticipantsDAO {
 	public List<String> getAllCoursesByStudentId(String studentId);
 	public List<String> getAllStudentsByCourseId(String courseId);
 	public int deleteCourse(String courseId);
+	public int deleteStudent(String studentId);
 }

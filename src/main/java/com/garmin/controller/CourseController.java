@@ -52,6 +52,7 @@ public class CourseController {
 
 	@RequestMapping(value = "/{courseId}/students", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<StudentBO> listAllStudentsAtCourse(@PathVariable String courseId) {
+		facultyLogger.info("The listAllStudentAtCourse was called");
 		return facultyBusinessServices.listAllStudentsAtCourse(courseId);
 
 	}
@@ -64,7 +65,6 @@ public class CourseController {
 	@ExceptionHandler(EntityAlreadyExistException.class)
 	@ResponseStatus(value = HttpStatus.CONFLICT)
 	public String alreadyInDatabase(EntityAlreadyExistException exception) {
-		// System.out.println(exception.getMessage());
 		facultyLogger.warn("EntityAlreadyExistException caught with message: {}", exception.getMessage());
 		return exception.getMessage();
 	}

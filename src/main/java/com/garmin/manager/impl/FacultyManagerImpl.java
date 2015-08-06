@@ -10,7 +10,6 @@ import com.garmin.dao.CourseDAO;
 import com.garmin.dao.ParticipantsDAO;
 import com.garmin.dao.StudentDAO;
 import com.garmin.dao.model.CourseDTO;
-import com.garmin.dao.model.StudentAtCoursesDTO;
 import com.garmin.dao.model.StudentDTO;
 import com.garmin.manager.FacultyManager;
 import com.garmin.model.exceptions.EntityAlreadyExistException;
@@ -156,8 +155,15 @@ public class FacultyManagerImpl implements FacultyManager {
 			participantsDAO.deleteCourse(courseDTO.getCourseId());
 		} else {
 			throw new EntityNotFoundException("Course with id= " + courseDTO.getCourseId() + " was not found");
-
 		}
-
+	}
+	
+	@Transactional(readOnly=false)
+	public void deleteStudent(StudentDTO studentDTO){
+		if(studentDAO.deleteStudent(studentDTO)!=0){
+			participantsDAO.deleteStudent(studentDTO.getId());
+		}else{
+			throw new EntityNotFoundException("Student with id= " + studentDTO.getId() + " was not found");
+		}
 	}
 }

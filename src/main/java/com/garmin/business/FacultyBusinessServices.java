@@ -2,7 +2,6 @@ package com.garmin.business;
 
 import java.util.List;
 
-import com.garmin.dao.model.StudentAtCoursesDTO;
 import com.garmin.model.CourseBO;
 import com.garmin.model.StudentBO;
 import com.garmin.model.exceptions.EntityAlreadyExistException;
@@ -19,4 +18,5 @@ public interface FacultyBusinessServices {
 	public List<CourseBO> listStudentWithCourses(String studentId);
 	public List<StudentBO> listAllStudentsAtCourse( String courseId);
 	public void deleteCourse(CourseBO course);
+	public void deleteStudent(StudentBO student);
 }

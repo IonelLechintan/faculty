@@ -13,4 +13,5 @@ public interface StudentDAO {
 	public StudentDTO getStudentByRegistrationNoAndName(String name,int regNo);
 	public int insertStudent(StudentDTO student);
 	public int updateStudent(StudentDTO student);
+	public int deleteStudent(StudentDTO studentDTO);
 }

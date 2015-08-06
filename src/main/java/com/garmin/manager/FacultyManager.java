@@ -17,4 +17,5 @@ public interface FacultyManager {
 	public List<CourseDTO> listStudentAtCourses(String studentId);
 	public List<StudentDTO> listAllStudentsAtCourse(String courseId);
 	public void deleteCourse(CourseDTO courseDTO);
+	public void deleteStudent(StudentDTO studentDTO);
 }

@@ -57,4 +57,9 @@ public class ParticipantsDAOImpl implements ParticipantsDAO {
 		String sql = "delete from participants where courseId=?";
 		return jdbcTemplateObject.update(sql, courseId);
 	}
+	
+	public int deleteStudent(String studentId) {
+		String sql = "delete from participants where studentId=?";
+		return jdbcTemplateObject.update(sql, studentId);
+	}
 }
