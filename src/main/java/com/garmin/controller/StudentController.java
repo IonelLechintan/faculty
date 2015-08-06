@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.garmin.business.FacultyBusinessServices;
 import com.garmin.model.CourseBO;
 import com.garmin.model.StudentBO;
-import com.garmin.model.exceptions.EmptyDataSetException;
+import com.garmin.model.exceptions.InvalidDataSubmittedException;
 import com.garmin.model.exceptions.EntityAlreadyExistException;
 import com.garmin.model.exceptions.EntityNotFoundException;
 
@@ -43,14 +43,19 @@ public class StudentController {
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public StudentBO addStudent(@RequestBody StudentBO student)
-			throws EntityAlreadyExistException, EmptyDataSetException, EntityNotFoundException {
+			throws EntityAlreadyExistException, InvalidDataSubmittedException, EntityNotFoundException {
 		if (student.getName() == null || student.getRegistrationNo() == 0)
-			throw new EmptyDataSetException("The data sent is null");
+			throw new InvalidDataSubmittedException("The data sent is invalid");
 		return facultyBusinessServices.addStudent(student);
 	}
 
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public void addStudentToCourses(@PathVariable String studentId, @RequestBody List<CourseBO> coursesToAttend) {
+		for (CourseBO courseBO : coursesToAttend) {
+			if (courseBO.getName().equals("")) {
+				throw new InvalidDataSubmittedException("The data sent is invalid");
+			}
+		}
 		facultyBusinessServices.addStudentToCourses(studentId, coursesToAttend);
 	}
 
@@ -58,7 +63,7 @@ public class StudentController {
 	public List<CourseBO> listStudentAtCourses(@PathVariable String studentId) {
 		return facultyBusinessServices.listStudentWithCourses(studentId);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteStudent(@RequestBody StudentBO student) {
 		facultyBusinessServices.deleteStudent(student);
@@ -67,15 +72,14 @@ public class StudentController {
 	@ExceptionHandler(EntityAlreadyExistException.class)
 	@ResponseStatus(value = HttpStatus.CONFLICT)
 	public String alreadyInDatabase(EntityAlreadyExistException exception) {
-		// System.out.println(exception.getMessage());
 		facultyLogger.warn("EntityAlreadyExistException caught with message: {}", exception.getMessage());
 		return exception.getMessage();
 	}
 
-	@ExceptionHandler(EmptyDataSetException.class)
+	@ExceptionHandler(InvalidDataSubmittedException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public ResponseEntity<String> nullDataSent(EmptyDataSetException exception) {
-		facultyLogger.warn("EmptyDataSetException caugth, Throwing new BadRequestException", exception);
+	public ResponseEntity<String> nullDataSent(InvalidDataSubmittedException exception) {
+		facultyLogger.warn("InvalidDataSubmittedException caugth, Throwing new BadRequestException", exception);
 		return new ResponseEntity<String>(exception.getMessage(), HttpStatus.NOT_FOUND);
 	}
 

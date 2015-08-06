@@ -63,7 +63,7 @@ public class StudentDAOImpl implements StudentDAO {
 	}
 
 	public int deleteStudent(StudentDTO studentDTO) {
-		String sql = "update student set isDeleted=1 where studentId=?";
+		String sql = "update student set isDeleted=1 where studentId=? and isDeleted=0";
 		return jdbcTemplateObject.update(sql, studentDTO.getId());
 	}
 

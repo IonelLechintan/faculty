@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.garmin.controller.StudentController;
 import com.garmin.dao.CourseDAO;
 import com.garmin.dao.ParticipantsDAO;
 import com.garmin.dao.StudentDAO;
@@ -19,6 +21,7 @@ public class FacultyManagerImpl implements FacultyManager {
 	private StudentDAO studentDAO;
 	private CourseDAO courseDAO;
 	private ParticipantsDAO participantsDAO;
+	private final static Logger facultyLogger = org.slf4j.LoggerFactory.getLogger(FacultyManagerImpl.class);
 
 	public FacultyManagerImpl(StudentDAO studentDAO, CourseDAO courseDAO, ParticipantsDAO participantsDAO) {
 		this.studentDAO = studentDAO;
@@ -157,13 +160,17 @@ public class FacultyManagerImpl implements FacultyManager {
 			throw new EntityNotFoundException("Course with id= " + courseDTO.getCourseId() + " was not found");
 		}
 	}
-	
-	@Transactional(readOnly=false)
-	public void deleteStudent(StudentDTO studentDTO){
-		if(studentDAO.deleteStudent(studentDTO)!=0){
-			participantsDAO.deleteStudent(studentDTO.getId());
-		}else{
+
+	@Transactional(readOnly = false)
+	public void deleteStudent(StudentDTO studentDTO) {
+		//StudentDTO studentDTOHelper=studentDAO.getStudentById(studentDTO.getId());
+		//if(studentDTOHelper!=null){
+		if (studentDAO.deleteStudent(studentDTO) != 0) {
+			facultyLogger.info("here"+participantsDAO.deleteStudent(studentDTO.getId()));
+		} else {
+			facultyLogger.info("Am ajuns in metoda deleteStudent din clasa FacultyManagerImpl, pe ramura else");
 			throw new EntityNotFoundException("Student with id= " + studentDTO.getId() + " was not found");
 		}
+		
 	}
 }

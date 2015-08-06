@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.garmin.business.FacultyBusinessServices;
 import com.garmin.model.CourseBO;
 import com.garmin.model.StudentBO;
-import com.garmin.model.exceptions.EmptyDataSetException;
+import com.garmin.model.exceptions.InvalidDataSubmittedException;
 import com.garmin.model.exceptions.EntityAlreadyExistException;
 import com.garmin.model.exceptions.EntityNotFoundException;
 
@@ -43,10 +43,10 @@ public class CourseController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public CourseBO addCourse(@RequestBody CourseBO courseBO, @PathVariable String id)
-			throws EntityAlreadyExistException, EmptyDataSetException, EntityNotFoundException {
+			throws EntityAlreadyExistException, InvalidDataSubmittedException, EntityNotFoundException {
 		facultyLogger.info("The post method was called");
 		if (courseBO.getName() == null)
-			throw new EmptyDataSetException("The data sent is null");
+			throw new InvalidDataSubmittedException("The data sent is null");
 		return facultyBusinessServices.addCourse(courseBO);
 	}
 
@@ -69,9 +69,9 @@ public class CourseController {
 		return exception.getMessage();
 	}
 
-	@ExceptionHandler(EmptyDataSetException.class)
+	@ExceptionHandler(InvalidDataSubmittedException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public ResponseEntity<String> nullDataSent(EmptyDataSetException exception) {
+	public ResponseEntity<String> nullDataSent(InvalidDataSubmittedException exception) {
 		facultyLogger.warn("EmptyDataSetException caugth, Throwing new BadRequestException", exception);
 		return new ResponseEntity<String>(exception.getMessage(), HttpStatus.NOT_FOUND);
 	}
